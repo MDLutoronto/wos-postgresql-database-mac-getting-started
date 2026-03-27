@@ -5,6 +5,9 @@ description: "This tutorial will help you get up and running querying the Web of
 staff:
     - name: Kara Handren
       link: https://library.utoronto.ca/staff/kara-handren
+maintainer:
+ - name: Kara Handren
+   link: https://library.utoronto.ca/staff/kara-handren
 created_date: 2022-02-07
 permalink: "/"  #! Remove this if not the homepage
 ---
