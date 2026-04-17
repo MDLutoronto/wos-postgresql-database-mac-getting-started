@@ -1,51 +1,11 @@
 ---
-title: "Getting Started with the Web of Science PostgreSQL Database - Mac"
-layout: "home"
-description: "This tutorial will help you get up and running querying the Web of Science PostgreSQL database on a Mac computer. It will cover accessing the high performance computing environment, querying the database via SQL statements and from within a python script, and downloading the results of the query. You will need a Compute Canada account with the proper credentials to access this database. If you haven’t done so already, you should first follow the instructions to get your account set up. Note: This tutorial is intended for Mac users. If you are using Windows, check out this tutorial instead."
-staff:
-    - name: Kara Handren
-      link: https://library.utoronto.ca/staff/kara-handren
-maintainer:
- - name: Kara Handren
-   link: https://library.utoronto.ca/staff/kara-handren
-created_date: 2022-02-07
-permalink: "/"  #! Remove this if not the homepage
+title: Query the Database via SQL
+parent: Getting Started with the Web of Science PostgreSQL Database - Mac
+layout: default
+nav_order: 2
 ---
 
-# Getting Started with the Web of Science PostgreSQL Database - Mac
-
-This tutorial will help you get up and running querying the [Web of Science PostgreSQL database](https://mdl.library.utoronto.ca/web-science-postgresql-database) on a Mac computer. It will cover accessing the high performance computing environment, querying the database via SQL statements and from within a python script, and downloading the results of the query.
-
-You will need a Compute Canada account with the proper credentials to access this database. If you haven’t done so already, you should first follow the [instructions to get your account set up](https://mdl.library.utoronto.ca/technology/tutorials/how-access-web-science-postgresql-database).
-
-Note: This tutorial is intended for Mac users. If you are using Windows, check out this [tutorial](https://mdl.library.utoronto.ca/technology/tutorials/getting-started-web-science-postgresql-database) instead.
-
-### Table of Contents
-
-[Access the High Performance Computing Environment](#access-the-high-performance-computing-environment)
-
-[Query the Database via SQL](#query-the-database-via-sql)
-
-[Download the Results](#download-the-result)
-
-[Query the Database via Python](#query-the-database-via-python)
-
-### Accessing the High Performance Computing Environment
-{: #access-the-high-performance-computing-environment}
-
-If working in high performance computing environment is new to you, we would recommend you attend [SciNet workshops](https://education.scinet.utoronto.ca/) to learn more, especially their Intro to SciNet & Triullium workshop (run periodically) or watch [a recording of a previous session](https://www.youtube.com/@scinethpcattheuniversityof8962).
-
-  
-But here are some steps to get your started:
-
-1. You do not need to install any programs or clients to access the environment from a Mac. Access is via Terminal.
-2. You will use an SSH key to connect. This requires some initial configuration, but once this is done it is both more secure and more convenient. If you have not already generated a key pair, instructions on how to do so can be found [here](https://mdl.library.utoronto.ca/technology/tutorials/generating-ssh-key-pairs-mac). More detailed instructions are also available on the [SciNet wiki](https://docs.computecanada.ca/wiki/Using_SSH_keys_in_Linux). Remember, you'll need create a key-pair on any systems you intend to connect with!
-3. To login to the remote host, use this command in Terminal: `ssh -i .ssh/myprivatekeyname <computercanadausername>@trillium.scinet.utoronto.ca`. The system will prompt you to enter the passphrase for your key (Note, `-i .ssh/myprivatekeyname` is only necessary if you are not using the default key filepath and filename. See complete SSH setup instructions [here](https://mdl.library.utoronto.ca/technology/tutorials/generating-ssh-key-pairs-mac) for more information).
-4. You are now connected to the server
-5. To log out, type `exit` and press Enter. You are now back in your local environment.
-
 ### Query the Database via SQL
-{: #query-the-database-via-sql}
 
 If SQL is a new concept for you, we would first suggest you learn the basics through a tutorial, such as [this one from Tutorial Republic](https://www.tutorialrepublic.com/sql-tutorial/). You may also want to explore the [PostgreSQL documentation](https://www.postgresql.org/docs/14/index.html) to help you with your work.
 
@@ -102,7 +62,7 @@ If SQL is a new concept for you, we would first suggest you learn the basics thr
     SELECT * 
     FROM publication 
     INNER JOIN author ON publication.id=author.wos_id 
-	INNER JOIN source ON publication.source_id=source.id 
+    INNER JOIN source ON publication.source_id=source.id 
     WHERE publication.title ILIKE '%visualization%' 
     AND publication.title ILIKE '%librar%' 
     AND publication.year > 2015;
@@ -220,104 +180,3 @@ If SQL is a new concept for you, we would first suggest you learn the basics thr
 Throughout the examples, we have been using plain wildcard pattern matching, but you may want to explore [more sophisticated ways to search text](https://www.postgresql.org/docs/14/textsearch.html) as well.
 
 A Note on Query Efficiency: Generally, Postgres is really smart at analyzing what you want to do and querying the database in the most efficient way, so often changing the query structure won't make any difference because Postgres really does the same thing under the hood. One thing that sometimes helps is to increase the number of workers, for example with this command `SET max_parallel_workers_per_gather = 16`, but not all operations in a query can be parallelized or parallelized well. Another thing that potentially helps for complex queries is to use temporary tables instead of table variables. For example, [rewriting example h](http://mdl.library.utoronto.ca/sites/default/public/mdldata/open/international/wos/rewritten_example_h.txt) to use temporary tables sped up the query from minutes to seconds.
-
-### Download the Results
-{: #download-the-result}
-
-1. From the Trillium prompt, type `ls` to list all the files in your personal directory. If you followed the steps above, you should see a csv file you just saved
-2. There are multiple ways to download your data file via Terminal, which are outlined in the [SciNet Wiki](https://docs.computecanada.ca/wiki/Transferring_data). If you need to ensure that two datasets remain synchronized, you may want to use rsync or Globus. Otherwise, SFTP or SCP will work well to transfer files back and forth from your local machine to the remove environment.
-3. To download using SCP:
-	* Open a new Terminal window that is not connected to Trillium (ie. your local directory),  and run the following command: `scp <computecanadausername>@trillium.scinet.utoronto.ca:[filename including extension] /some/local/directory`
-		+ For example, to download the files to a SciNet folder in your Documents: `scp doej@trillium.scinet.utoronto.ca:myfirstqueryresult.csv /Users/user/Documents/SciNet`
-		+ If prompted, enter your SSH key passphrase
-		+ Note: if you received a permission denied error and are not prompted for your passphrase, try adding -i <**privatekeyname**> to the scp command: `scp -i <privatekeyname> <computecanadausername>@trillium.scinet.utoronto.ca:[filename including extension] /some/local/directory`
-4. You should see a progress bar, which will show 100% once the download is complete
-5. Now if you go to that directory, you should see your new csv file. Open it up and view your results!
-
-### Query the Database via Python
-{: #query-the-database-via-python}
-
-If you would like to programmatically construct your SQL statements (and programmatically manipulate the results), you may prefer to use Python code to query the database.
-
-If Python is new for you, we would first suggest you learn the basics through a tutorial, such as [this one from W3Schools](https://www.w3schools.com/python/default.asp). You can also consult our recorded workshop [A Friendly Introduction to Python for Absolute Beginners: Part 1](http://play.library.utoronto.ca/watch/d17a5f60462dec00565b7809d2953757), as well as the [Setup Instructions](https://maps.library.utoronto.ca/workshops/PythonPart1/SetupInstructions.pdf) (includes how to get slides, workshop files, etc.) & [Solutions](https://maps.library.utoronto.ca/workshops/PythonPart1/WorkshopSolutions.zip) (packaged in a zip file) for this workshop.
-
-1. In your favourite Python editor, write your script and save your file as a .py file. For this example, we will call it **myfirstpythonscript.py**. Here is an example of a Python script that takes a list of author names and finds their publications ([download the script](https://mdl.library.utoronto.ca/sites/default/public/mdldata/open/international/wos/myfirstpythonscript.py)- note that you may have to right click to save the Python script instead of viewing the text in a browser tab). This script creates a temporary table of our authors, and then joins that table to the author table to find the authors’ publication IDs (this is more efficient than calling multiple SELECT statements in a loop, one for each author). Then this table is joined with the publication table to find the publication titles. You will see that this script uses the [psycopg2](https://www.psycopg.org/docs/index.html) package and provides information on how to connect to the database. You do not have to specify a username and password, as the system will automatically detect if you have permission. You can use this script and the SQL statement examples above, as guides to create your own Python code to query the database:
-
-    ```
-    # You need a couple of packages to query the database and write a CSV file
-    import psycopg2
-    import csv
-
-    # You will need this database name and host information to create a connection to the database
-    database_config = {
-        'dbname': 'wos',
-        'host': 'idb1'
-    }
-
-    # This is a list of names we are searching for. Feel free to edit the names to find publications 
-    # from researchers you are interested in
-    author_names = [
-        'Dearborn, Dylanne',
-        'Fortin, Marcel',
-        'Handren, Kara',
-        'Schultz, Michelle Kelly',
-        'Trimble, Leanne',
-    ]
-
-    # This section of code uses the psycopg2 package to connect to the database
-    con = psycopg2.connect(**database_config)
-    cur = con.cursor()
-
-    # This executes a SQL statement that creates a temporary table with our list of author names 
-    cur.execute('CREATE TEMPORARY TABLE _author (name TEXT)')
-    for name in author_names:
-        cur.execute('INSERT INTO _author VALUES (%s)', (name,))
-
-    # This SQL statement joins our list of names with the database author table to filter the results
-    # to only the authors we are looking for. This is a more efficient approach than looping through
-    # author names and running multiple SELECT statements
-    # Note: Using a backslash as the line is long - not part of the SQL statement
-    cur.execute("SELECT wos_id, full_name FROM author INNER JOIN _author ON author.full_name \
-    ILIKE '%'||_author.name||'%'")
-
-    # This next section of code goes line by line through the results and adds them to a dictionary 
-    # data type in python, where the publication id for the author is the key and the name of the
-    # author is the value. It also prints it out so you can see the data.
-    mylist = dict()
-    while result := cur.fetchone():
-        print(result)
-        mylist[result[0]] = result[1]
-
-    # This next section sets up a CSV that we will use to store the results of our final query
-    with open('myfirstpythonresults.csv', mode='w', encoding='UTF8', newline='') as csv_file:
-        myheader = ['title']
-        writer = csv.writer(csv_file)
-        writer.writerow(myheader)
-
-        # This section goes through each item in the dictionary that we created earlier. For each
-        # key (which is an author’s publication ID), it queries the database to find its title. Then
-        # it writes that title in the CSV file. It also prints it out so you can see the data.
-        for x in mylist.keys():
-            cur.execute("SELECT title FROM publication WHERE publication.id=%s", (x,))
-            while finalresult := cur.fetchone():
-                print(finalresult)
-                writer.writerow(finalresult)
-
-    # Finally, all the connections to the database are closed
-    cur.close()
-    con.close()
-    ```
-2. Once your Python script is ready, use SCP to to upload from your local computer. This is the same for downloading ([as described earlier](#download-the-result)), but the order of directories is reversed: `scp /your/local/directory/:[filename and extension] <computecanadausername>@trillium.scinet.utoronto.ca:/home/[firstinitialofyourlastname]/<computecanadausername>/<computecanadausername>.` Note: If you are not the Principal Investigator ie. your account was sponsored by another user, you'll need to substitute that person's username in place of the first <**computecanadausername**>, as well as their first initial in [firstinitialofyourlastname]. In this case: `scp /your/local/directory/:[filename and extension] <computecanadausername>@trillium.scinet.utoronto.ca:/home/[firstinitialofyoursponsorslastname]/<sponsorscomputecanadausername>/<computecanadausername>`
-	* For example: `scp /Users/user/Documents/SciNet/myfirstpythonscript.py doej@trillium.scinet.utoronto.ca:/home/d/doej/doej`
-	* For example, for a sponsored account (smithp sponsored by doej): `scp /Users/user/Documents/SciNet/myfirstpythonscript.py smithp@trillium.scinet.utoronto.ca:/home/d/doej/smithp`
-	* If prompted, enter your SSH key passphrase
-3. Once your script has been uploaded, connect to Trillium [as described earlier](#access-the-high-performance-computing-environment)
-4. Next we need to set up the environment to run our Python script. Type `module load python/3.9.8`
-5. Next type `virtualenv --system-site-packages myenv`
-6. Next type `source myenv/bin/activate`
-7. Finally type `pip install psycopg2-binary`
-8. Once the package has installed, you are ready to run your Python script. Type `python myfirstpythonscript.py` or substitute in the name of your Python script if you called it something else.  
-(Important Note: If querying is only a small part of the overall task, and the majority of computing effort is going into postprocessing the query results, for example, using natural language processing or graph analysis, to be done in parallel, then there are different ways to run your script that involve [submitting it as a job](https://docs.scinet.utoronto.ca/index.php/Niagara_Quickstart#Submitting_jobs) to be run. Feel free to [contact us](https://mdl.library.utoronto.ca/about/contact-form) for help.)
-9. It may take a while to run, but when it is finished you will see the command prompt again, and now if you type `ls`from the Trillium prompt, you should see a new CSV file created from the Python script. Download the file ([as described earlier](#download-the-result)) and open up the file to see the results
-
-These are just a few examples to help you get started, but of course there is much more you can do. If you have any questions, feel free to [contact us](https://mdl.library.utoronto.ca/about/contact-form).
