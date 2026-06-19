@@ -3,9 +3,16 @@ title: Query the Database via Python
 parent: Getting Started with the Web of Science PostgreSQL Database - Mac
 layout: default
 nav_order: 4
+staff:
+    - name: Kara Handren
+      link: https://library.utoronto.ca/staff/kara-handren
+maintainer:
+    - name: Leslie Barnes
+      link: https://library.utoronto.ca/staff/leslie-barnes
+created_date: 2022-02-07
 ---
 
-### Query the Database via Python
+## Query the Database via Python
 
 If you would like to programmatically construct your SQL statements (and programmatically manipulate the results), you may prefer to use Python code to query the database.
 
@@ -77,17 +84,19 @@ If Python is new for you, we would first suggest you learn the basics through a 
     cur.close()
     con.close()
     ```
-2. Once your Python script is ready, use SCP to to upload from your local computer. This is the same for downloading ([as described earlier](#download-the-result)), but the order of directories is reversed: `scp /your/local/directory/:[filename and extension] <computecanadausername>@trillium.scinet.utoronto.ca:/home/[firstinitialofyourlastname]/<computecanadausername>/<computecanadausername>.` Note: If you are not the Principal Investigator ie. your account was sponsored by another user, you'll need to substitute that person's username in place of the first <**computecanadausername**>, as well as their first initial in [firstinitialofyourlastname]. In this case: `scp /your/local/directory/:[filename and extension] <computecanadausername>@trillium.scinet.utoronto.ca:/home/[firstinitialofyoursponsorslastname]/<sponsorscomputecanadausername>/<computecanadausername>`
+2. Once your Python script is ready, use SCP to to upload from your local computer. This is the same for downloading ([as described earlier](https://mdlutoronto.github.io/wos-postgresql-database-mac-getting-started/3-download-the-result/)), but the order of directories is reversed: `scp /your/local/directory/:[filename and extension] <computecanadausername>@trillium.scinet.utoronto.ca:/home/[firstinitialofyourlastname]/<computecanadausername>/<computecanadausername>.` Note: If you are not the Principal Investigator ie. your account was sponsored by another user, you'll need to substitute that person's username in place of the first <**computecanadausername**>, as well as their first initial in [firstinitialofyourlastname]. In this case: `scp /your/local/directory/:[filename and extension] <computecanadausername>@trillium.scinet.utoronto.ca:/home/[firstinitialofyoursponsorslastname]/<sponsorscomputecanadausername>/<computecanadausername>`
     * For example: `scp /Users/user/Documents/SciNet/myfirstpythonscript.py doej@trillium.scinet.utoronto.ca:/home/d/doej/doej`
     * For example, for a sponsored account (smithp sponsored by doej): `scp /Users/user/Documents/SciNet/myfirstpythonscript.py smithp@trillium.scinet.utoronto.ca:/home/d/doej/smithp`
     * If prompted, enter your SSH key passphrase
-3. Once your script has been uploaded, connect to Trillium [as described earlier](#access-the-high-performance-computing-environment)
+3. Once your script has been uploaded, connect to Trillium [as described earlier](https://mdlutoronto.github.io/wos-postgresql-database-mac-getting-started/1-access-the-high-performance-computing-environment/)
 4. Next we need to set up the environment to run our Python script. Type `module load python/3.9.8`
 5. Next type `virtualenv --system-site-packages myenv`
 6. Next type `source myenv/bin/activate`
 7. Finally type `pip install psycopg2-binary`
 8. Once the package has installed, you are ready to run your Python script. Type `python myfirstpythonscript.py` or substitute in the name of your Python script if you called it something else.  
 (Important Note: If querying is only a small part of the overall task, and the majority of computing effort is going into postprocessing the query results, for example, using natural language processing or graph analysis, to be done in parallel, then there are different ways to run your script that involve [submitting it as a job](https://docs.scinet.utoronto.ca/index.php/Niagara_Quickstart#Submitting_jobs) to be run. Feel free to [contact us](https://mdl.library.utoronto.ca/about/contact-form) for help.)
-9. It may take a while to run, but when it is finished you will see the command prompt again, and now if you type `ls`from the Trillium prompt, you should see a new CSV file created from the Python script. Download the file ([as described earlier](#download-the-result)) and open up the file to see the results
+9. It may take a while to run, but when it is finished you will see the command prompt again, and now if you type `ls`from the Trillium prompt, you should see a new CSV file created from the Python script. Download the file ([as described earlier](https://mdlutoronto.github.io/wos-postgresql-database-mac-getting-started/3-download-the-result/)) and open up the file to see the results
 
 These are just a few examples to help you get started, but of course there is much more you can do. If you have any questions, feel free to [contact us](https://mdl.library.utoronto.ca/about/contact-form).
+
+**Technique:** [Searching for maps and data](https://mdlutoronto.github.io/tutorials-search/?technique=Searching+for+maps+and+data), [Text and Data Mining](https://mdlutoronto.github.io/tutorials-search/?technique=Text+and+Data+Mining) \| **Tools:** [Web of Science](https://mdlutoronto.github.io/tutorials-search/?tool=Web+of+Science)
