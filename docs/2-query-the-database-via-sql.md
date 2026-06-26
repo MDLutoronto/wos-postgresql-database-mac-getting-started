@@ -3,13 +3,20 @@ title: Query the Database via SQL
 parent: Getting Started with the Web of Science PostgreSQL Database - Mac
 layout: default
 nav_order: 2
+staff:
+    - name: Kara Handren
+      link: https://library.utoronto.ca/staff/kara-handren
+maintainer:
+    - name: Leslie Barnes
+      link: https://library.utoronto.ca/staff/leslie-barnes
+created_date: 2022-02-07
 ---
 
-### Query the Database via SQL
+## Query the Database via SQL
 
 If SQL is a new concept for you, we would first suggest you learn the basics through a tutorial, such as [this one from Tutorial Republic](https://www.tutorialrepublic.com/sql-tutorial/). You may also want to explore the [PostgreSQL documentation](https://www.postgresql.org/docs/14/index.html) to help you with your work.
 
-1. Once logged in [as described earlier](#access-the-high-performance-computing-environment), at the prompt, type `module load postgresql` (and press Enter after this and any commands you type into the command prompt going forward)
+1. Once logged in [as described earlier](https://mdlutoronto.github.io/wos-postgresql-database-mac-getting-started/1-access-the-high-performance-computing-environment/), at the prompt, type `module load postgresql` (and press Enter after this and any commands you type into the command prompt going forward)
 2. Type `psql -h idb1 -d wos` to start up the command-line interface to PostgreSQL and be able to query the Web of Science database
 3. Type `\?` for help with psql commands (whenever you see “—More—” at the bottom of the screen, press the space bar to page through the information)
 4. Let’s try a few of these psql commands. Type `\x` to have a nicer expanded display of the outputs/results
@@ -180,3 +187,5 @@ If SQL is a new concept for you, we would first suggest you learn the basics thr
 Throughout the examples, we have been using plain wildcard pattern matching, but you may want to explore [more sophisticated ways to search text](https://www.postgresql.org/docs/14/textsearch.html) as well.
 
 A Note on Query Efficiency: Generally, Postgres is really smart at analyzing what you want to do and querying the database in the most efficient way, so often changing the query structure won't make any difference because Postgres really does the same thing under the hood. One thing that sometimes helps is to increase the number of workers, for example with this command `SET max_parallel_workers_per_gather = 16`, but not all operations in a query can be parallelized or parallelized well. Another thing that potentially helps for complex queries is to use temporary tables instead of table variables. For example, [rewriting example h](http://mdl.library.utoronto.ca/sites/default/public/mdldata/open/international/wos/rewritten_example_h.txt) to use temporary tables sped up the query from minutes to seconds.
+
+**Technique:** [Searching for maps and data](https://mdlutoronto.github.io/tutorials-search/?technique=Searching+for+maps+and+data), [Text and Data Mining](https://mdlutoronto.github.io/tutorials-search/?technique=Text+and+Data+Mining) \| **Tools:** [Web of Science](https://mdlutoronto.github.io/tutorials-search/?tool=Web+of+Science)
